@@ -9,8 +9,7 @@ import SuccessScreen from '@/components/SuccessScreen';
 import FinalNote from '@/components/FinalNote';
 import { CheckCircle, BookOpen, Activity, Star } from 'lucide-react';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = `/api`;
 const SIDE_IMAGE = 'https://images.unsplash.com/photo-1622470190232-81df3782484b?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85&w=1200';
 
 const STEPS = [

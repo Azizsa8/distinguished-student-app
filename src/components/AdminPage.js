@@ -3,10 +3,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Users, Calendar, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = `/api`;
 
 export default function AdminPage() {
   const [students, setStudents] = useState([]);
@@ -27,7 +26,7 @@ export default function AdminPage() {
             <h1 className="text-2xl font-bold font-cairo text-[#0A422D]">لوحة الإدارة</h1>
             <p className="text-sm text-[#6B7068] mt-1">جميع الاستمارات المقدمة</p>
           </div>
-          <Link to="/" className="flex items-center gap-2 text-sm text-[#0A422D] hover:underline">
+          <Link href="/" className="flex items-center gap-2 text-sm text-[#0A422D] hover:underline">
             <ArrowRight size={16} />
             العودة للاستمارة
           </Link>
@@ -80,7 +79,7 @@ export default function AdminPage() {
                       </td>
                       <td className="px-4 py-3">
                         <a
-                          href={`${BACKEND_URL}/api/students/${s.id}/pdf`}
+                          href={`/api/students/${s.id}/pdf`}
                           target="_blank"
                           rel="noopener noreferrer"
                           data-testid={`download-pdf-${s.id}`}

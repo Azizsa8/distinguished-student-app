@@ -3,8 +3,6 @@ import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, Download, RotateCcw, User, BookOpen, Star } from 'lucide-react';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-
 const Section = ({ title, children }) => (
   <div className="mb-6">
     <h3 className="text-sm font-semibold text-[#0A422D] uppercase tracking-widest mb-3 pb-2 border-b border-[#E5E1DA]">
@@ -45,7 +43,7 @@ export default function SuccessScreen({ formData, submissionId }) {
 
   const handleDownloadPdf = () => {
     if (submissionId) {
-      window.open(`${BACKEND_URL}/api/students/${submissionId}/pdf`, '_blank');
+      window.open(`/api/students/${submissionId}/pdf`, '_blank');
     }
   };
 
