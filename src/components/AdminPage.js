@@ -26,10 +26,21 @@ export default function AdminPage() {
             <h1 className="text-2xl font-bold font-cairo text-[#0A422D]">لوحة الإدارة</h1>
             <p className="text-sm text-[#6B7068] mt-1">جميع الاستمارات المقدمة</p>
           </div>
-          <Link href="/" className="flex items-center gap-2 text-sm text-[#0A422D] hover:underline">
-            <ArrowRight size={16} />
-            العودة للاستمارة
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/" className="flex items-center gap-2 text-sm text-[#0A422D] hover:underline">
+              <ArrowRight size={16} />
+              العودة للاستمارة
+            </Link>
+            <button
+              onClick={async () => {
+                await fetch('/api/admin/logout', { method: 'POST' });
+                window.location.href = '/admin/login';
+              }}
+              className="text-sm text-red-600 hover:underline font-medium"
+            >
+              تسجيل الخروج
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
