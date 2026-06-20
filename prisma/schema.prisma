@@ -7,53 +7,72 @@ generator client {
   provider = "prisma-client-js"
 }
 
-enum ApplicationStatus {
-  PENDING
-  REVIEWED
-  HIGH_POTENTIAL
-  ACCEPTED
-  REJECTED
-}
-
-enum TalentCategory {
-  PROGRAMMING
-  PUBLIC_SPEAKING
-  MENTAL_MATH
-  WRITING
-  ART_AND_DESIGN
-  ROBOTICS
-  OTHER
-}
-
 model Student {
-  id                 String            @id @default(uuid())
-  firstName          String
-  lastName           String
-  email              String            @unique
-  phone              String
-  dateOfBirth        DateTime
-  school             String
-  gradeLevel         String
+  id                    String   @id @default(uuid())
   
-  // Relations
-  extracurriculars   Extracurricular?
-  talents            TalentCategory[]
+  // Step 1: Personal
+  full_name             String
+  dob                   String   @default("")
+  student_mobile        String
+  student_email         String
+  guardian_name         String
+  guardian_mobile       String
+  siblings_count        Int      @default(0)
+  birth_order           Int      @default(1)
+  education_type        String
+  academic_year         String
+  school_university     String
+  notes                 String?
+
+  // Step 2: Activities
+  quran_memorized       String   @default("")
+  quran_plan            Boolean  @default(false)
+  quran_teacher         Boolean  @default(false)
+  tajweed_level         String   @default("")
   
+  favorite_sport        String?
+  sports_club           String?
+  championships_toggle  Boolean  @default(false)
+  championships_details String?
+  
+  freelance_toggle      Boolean  @default(false)
+  volunteer_toggle      Boolean  @default(false)
+  volunteer_details     String?
+  
+  training_toggle       Boolean  @default(false)
+  training_details      String?
+  career_future_plan    String   @default("")
+
+  // Step 3: Talents
+  english_level         String   @default("")
+  english_certs_toggle  Boolean  @default(false)
+  english_certs_score   String?
+  smart_device_level    String   @default("")
+  core_skills_text      String   @default("")
+  talents_selected      String[]
+
   // System Fields
-  applicationStatus  ApplicationStatus @default(PENDING)
-  pdfUrl             String?
-  
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
+  archetype             String?
+  archetype_color       String?
+  archetype_description String?
+  archetype_score       Int      @default(0)
+
+  submitted_at          DateTime @default(now())
+  updated_at            DateTime @updatedAt
 }
 
-model Extracurricular {
-  id                 String   @id @default(uuid())
-  studentId          String   @unique
-  student            Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  
-  quranMemorization  String?
-  sports             String?
-  volunteering       String?
-  careerPlans        String?
+model Setting {
+  id               String   @id @default("global")
+  ai_provider      String?
+  ai_api_key       String?
+  ai_base_url      String?
+  ai_model         String?
+  n8n_webhook_url  String?
+  n8n_secret       String?
+  email_provider   String?
+  email_api_key    String?
+  email_from       String?
+  email_recipients String?
+  updated_at       DateTime @updatedAt
 }
+
