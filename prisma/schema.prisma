@@ -1,0 +1,59 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWED
+  HIGH_POTENTIAL
+  ACCEPTED
+  REJECTED
+}
+
+enum TalentCategory {
+  PROGRAMMING
+  PUBLIC_SPEAKING
+  MENTAL_MATH
+  WRITING
+  ART_AND_DESIGN
+  ROBOTICS
+  OTHER
+}
+
+model Student {
+  id                 String            @id @default(uuid())
+  firstName          String
+  lastName           String
+  email              String            @unique
+  phone              String
+  dateOfBirth        DateTime
+  school             String
+  gradeLevel         String
+  
+  // Relations
+  extracurriculars   Extracurricular?
+  talents            TalentCategory[]
+  
+  // System Fields
+  applicationStatus  ApplicationStatus @default(PENDING)
+  pdfUrl             String?
+  
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+}
+
+model Extracurricular {
+  id                 String   @id @default(uuid())
+  studentId          String   @unique
+  student            Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  
+  quranMemorization  String?
+  sports             String?
+  volunteering       String?
+  careerPlans        String?
+}
