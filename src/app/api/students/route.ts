@@ -3,6 +3,42 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+async function notifyN8n(student: any) {
+  try {
+    const settings = await prisma.setting.findUnique({
+      where: { id: "global" }
+    });
+    const webhookUrl = settings?.n8n_webhook_url || process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL;
+
+    if (!webhookUrl) return;
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (settings?.n8n_secret) {
+      headers["X-Webhook-Secret"] = settings.n8n_secret;
+    }
+
+    const response = await fetch(webhookUrl, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        source: "distinguished-student-app",
+        event: "student.submitted",
+        submitted_at: new Date().toISOString(),
+        student,
+      }),
+    });
+
+    if (!response.ok) {
+      console.warn("n8n webhook failed", response.status, await response.text());
+    }
+  } catch (error) {
+    console.warn("n8n webhook error", error);
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
@@ -64,6 +100,8 @@ export async function POST(req: NextRequest) {
         archetype_description: "نمط الطالب المحسوب بناءً على المعطيات",
       }
     });
+
+    await notifyN8n(student);
 
     return NextResponse.json(student);
   } catch (error: any) {
